@@ -1,0 +1,113 @@
+create database activity_points;
+use activity_point;
+
+CREATE TABLE Faculty (
+    FacultyID varchar(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    MobileNumber VARCHAR(15),
+    Department VARCHAR(50),
+    DepartmentContactNumber VARCHAR(15)
+);
+
+
+CREATE TABLE Student (USN VARCHAR(20) PRIMARY KEY,
+    Name VARCHAR(100),
+    MobileNumber VARCHAR(15),
+    EmailID VARCHAR(100),
+    Department VARCHAR(50),
+    Semester INT,
+);
+
+
+CREATE TABLE HOD (
+    HODID varchar (10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Department VARCHAR(50)
+);
+
+
+CREATE TABLE Activity (
+    ActivityID varchar (10) PRIMARY KEY,
+    ActivityName VARCHAR(100),
+    Location VARCHAR(100),
+    Date DATE,
+    Duration INT,
+    Points INT
+);
+
+
+CREATE TABLE Organization1(
+    OrganizationID varchar(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Address VARCHAR(200),
+    Type VARCHAR(50),
+    ActivityConducted VARCHAR(100)
+);
+
+
+CREATE TABLE FacultyStudent (
+    FacultyID varchar(10),
+    USN VARCHAR(20),
+    FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID),
+    FOREIGN KEY (USN) REFERENCES Student(USN)
+);
+
+
+CREATE TABLE Meeting (
+    MeetingID INT PRIMARY KEY AUTO_INCREMENT,
+    FacultyID varchar(10),
+    USN VARCHAR(20),
+    Date DATE,
+    Purpose VARCHAR(255),
+    Outcome TEXT,
+    FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID),
+    FOREIGN KEY (USN) REFERENCES Student(USN)
+);
+
+
+INSERT INTO Faculty VALUES ('1', 'Dr ab', '852567890', 'cse', '9843225888');
+INSERT INTO Faculty VALUES ('2', 'Dr. Ac', '987567890', 'cse', '9956245456');
+INSERT INTO Faculty VALUES ('3', 'Dr. ef', '945567890', 'cse', '9956295456');
+INSERT INTO Faculty VALUES ('4', 'Dr. bn', '967567890', 'cse', '9956246456');
+INSERT INTO Faculty VALUES ('5', 'Dr. de', '9856767890', 'cse', '9956245456');
+
+
+INSERT INTO Student VALUES ('23CS001', 'aq', '9876543211', 'aq@ex.com', 'Computer Science', 3 );
+INSERT INTO Student VALUES ('23CS002', 'ay', '9876543211', 'ay@ex.com', 'Computer Science', 3);
+INSERT INTO Student VALUES ('23CS003', 'auu', '98765466211', 'auu@ex.com', 'Computer Science', 3 );
+INSERT INTO Student VALUES ('23CS004', 'agj', '98765983211', 'agj@ex.com', 'Computer Science', 3 );
+INSERT INTO Student VALUES ('23CS005', 'adf', '98996543211', 'adf@ex.com', 'Computer Science', 3 );
+
+INSERT INTO HOD VALUES (H01, 'Dr. rohit', 'CSE');
+INSERT INTO HOD VALUES (H02, 'Dr. anu ', 'CSE');
+INSERT INTO HOD VALUES (H03, 'Dr. anu ', 'CSE');
+INSERT INTO HOD VALUES (H04, 'Dr. anu ', 'Iot');
+INSERT INTO HOD VALUES (H05, 'Dr. anu ', 'Iot');
+
+INSERT INTO Activity VALUES ('A1', ' Hackathon', 'Mumbai', '2024-04-17', 3, 20);
+INSERT INTO Activity VALUES ('A2', 'shadow', 'Pune', '2024-04-17', 3, 20);
+INSERT INTO Activity VALUES ('A3', 'fight', 'Pune', '2024-04-17', 3, 20);
+INSERT INTO Activity VALUES ('A4', 'wall', 'Pune', '2024-04-17', 3, 20);
+INSERT INTO Activity VALUES ('A5', 'rope', 'Pune', '2024-04-17', 3, 20);
+
+
+INSERT INTO Organization1 VALUES ('O1', 'cse', 'Mumbai', 'Research', 'Hackathon');
+INSERT INTO Organization1 VALUES ('O2', 'cse', 'Pune', 'Quiz', 'Hackat');
+INSERT INTO Organization1 VALUES ('O3', 'm', 'kolkata', 'Quiz', 'Hackath');
+INSERT INTO Organization1 VALUES ('O4', 'mm', 'Patna', 'Quiz', 'Hackon');
+INSERT INTO Organization1 VALUES ('O5', 'mmm', 'dhn', 'Quiz', 'Hakathon');
+
+
+select * from Faculty;
+select * from Student;
+select * from  HOD;
+select * from Activity;
+select * from Organization;
+
+
+
+Update organization set address="bengaluru" where department="cse";
+
+Delete from organisation where organization_id in (select organisation_id from activity group by organization_id having count(distinct USN)<2 );
+
+select s.name as studentname, s.parentname as parentname, f.name as facultyname from student s join faculty f ON S.FACULTY ID =F.FACULTY ID JOIN ACTIVITY A ON USN= A.USN GROUP BY S.USN,S.NAME,S.PARENTNAME,F.NAME HAVING SUM(A.POINTS)<50;
